@@ -2,22 +2,29 @@ from tkinter import Tk, BOTH, Canvas
 
 
 class Window:
-    def __init__(self, width, height):
-        self.__root = Tk()
-        self.__root.title("Window")
-        self.__root.protocol("WM_DELETE_WINDOW", self.close)
-        self.__canvas = Canvas(self.__root, bg="white", width=width, height=height)
-        self.__canvas.pack(fill=BOTH, expand=1)
-        self.__is_running = False
+    def __init__(self, width, height, bg_color="white"):
+        self._root = Tk()
+        self._root.title("Window")
+        self._root.protocol("WM_DELETE_WINDOW", self.close)
+        self._canvas = Canvas(self._root, bg=bg_color, width=width, height=height)
+        self._canvas.pack(fill=BOTH, expand=1)
+        self._is_running = False
+
+    def draw_line(self, line, color):
+        line.draw(self._canvas, color)
+
+    def draw_cell(self, cell, cell_color, bg_color):
+        cell.draw(self, cell_color, bg_color)
+
+    def draw_move(self, cell, to_cell, undo=False):
+        cell.draw_move(self, to_cell, undo)
 
     def redraw(self):
-        self.__root.update_idletasks()
-        self.__root.update()
+        self._root.update_idletasks()
+        self._root.update()
 
-    def wait_for_close(self):
-        self.__is_running = True
-        while self.__is_running:
-            self.redraw()
+    def mainloop(self):
+        self._root.mainloop()
 
     def close(self):
-        self.__is_running = False
+        self._root.quit()
